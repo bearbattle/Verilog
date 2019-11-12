@@ -1,1 +1,5 @@
 *.out
+.vscode/*
+*tb.v
+*.vcd
+*.txt
