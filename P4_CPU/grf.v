@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module grf(
            input clk,
            input Reset,
@@ -15,6 +17,12 @@ integer i;
 assign ReadData1 = GRF[ReadAddress1];
 assign ReadData2 = GRF[ReadAddress2];
 
+initial begin
+    for(i = 0; i < 32; i = i + 1) begin
+        GRF[i] <= 0;
+    end
+end
+
 always @(posedge clk) begin
     if (Reset) begin
         for(i = 0; i < 32; i = i + 1) begin
@@ -22,8 +30,9 @@ always @(posedge clk) begin
         end
     end
     else begin
-        if(WriteEnable && WriteAddress) begin
-            GRF[WriteAddress] = WriteData;
+        if(WriteEnable && WriteAddress != 0) begin
+            GRF[WriteAddress] <= WriteData;
+            $display("%h",GRF[WriteAddress]);
         end
     end
 end
