@@ -9,7 +9,8 @@ module grf(
            input [4:0] WriteAddress,
            input [31:0] WriteData,
            output [31:0] ReadData1,
-           output [31:0] ReadData2);
+           output [31:0] ReadData2
+       );
 
 reg [31:0] GRF [4:0];
 integer i;
