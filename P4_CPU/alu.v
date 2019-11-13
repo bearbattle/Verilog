@@ -5,11 +5,11 @@ module alu(
            input [31:0] B,
            input [1:0] ALUOp,
            output reg [31:0] C,
-           output reg zero
+           output reg Zero
        );
 
 always @(*) begin
-    zero = A == B ? 1 : 0;
+    Zero = A == B ? 1 : 0;
     case (ALUOp)
         2'b00:
             C = A + B;

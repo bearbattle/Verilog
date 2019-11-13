@@ -33,7 +33,7 @@ always @(posedge clk) begin
     else begin
         if(WriteEnable && WriteAddress != 0) begin
             GRF[WriteAddress] <= WriteData;
-            $display("%h",GRF[WriteAddress]);
+            $display("@%h: $%d <= %h", IFU.PC0, WriteAddress,WriteData);
         end
     end
 end

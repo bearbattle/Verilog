@@ -9,7 +9,8 @@ module ifu(
            input isjr,
            input [31:0] jrPC,
            output [31:0] Instruction,
-			  output [31:0] PC4
+			  output [31:0] PC4,
+			  output [31:0] PC0
        );
 
 //wire [31:0] InsAddr;
@@ -25,5 +26,7 @@ npc NPC(.curPC(PC.InstructionAddress),
 	.newPC(PC.nPC),
 	.PC4(PC4));
 im IM(.InstructionAddress(PC.InstructionAddress), .Instruction(Instruction));
+
+assign PC0 = PC.InstructionAddress;
 
 endmodule // ifu

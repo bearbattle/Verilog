@@ -9,7 +9,7 @@ module dm(
            output [31:0] ReadData
        );
 
-reg [31:0] RAM [9:0];
+reg [31:0] RAM [1023:0];
 integer i;
 
 assign ReadData = RAM[ReadAddress[31:2]];
@@ -29,6 +29,7 @@ always @(posedge clk ) begin
     else begin
         if(WriteEnable) begin
             RAM[WriteAddress[31:2]] = WriteData;
+				$display("@%h: *%h <= %h", IFU.PC0, WriteAddress, WriteData);
         end
     end
 end

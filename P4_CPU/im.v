@@ -4,7 +4,7 @@ module im(
            output [31:0] Instruction
        );
 
-reg [31:0] ROM [9:0];
+reg [31:0] ROM [1023:0];
 
 assign Instruction = ROM[InstructionAddress[11:2]];
 
