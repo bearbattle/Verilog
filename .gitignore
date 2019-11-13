@@ -3,3 +3,7 @@
 *tb.v
 *.vcd
 *.txt
+or.v
+and.v
+opcode.v
+funct.v
