@@ -20,16 +20,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 module controller(input [5:0] opcode,
                   input [5:0] funct,
-                  output isbeq,
-                  output isjal,
-                  output isjr,
-                  output [1:0] GRF_A3_MUX,
-                  output [1:0] GRF_WD_MUX,
-                  output GRF_WE,
-                  output ALU_B_MUX,
-                  output [1:0] ALUOp,
-                  output DM_WE,
-                  output [1:0] EXTOp);
+                  output reg isbeq,
+                  output reg isjal,
+                  output reg isjr,
+                  output reg [1:0] GRF_A3_MUX,
+                  output reg [1:0] GRF_WD_MUX,
+                  output reg GRF_WE,
+                  output reg ALU_B_MUX,
+                  output reg [1:0] ALUOp,
+                  output reg DM_WE,
+                  output reg [1:0] EXTOp);
 
 localparam R   = 6'b000000;
 localparam ori = 6'b001101;
@@ -58,13 +58,15 @@ always @(*) begin
         R: begin
             case (funct)
                 addu: begin
-					WE <= 1;
+                    GRF_WE <= 1;
                 end
                 subu: begin
-
+                    GRF_WE <= 1;
+                    ALUOp <= 1;
                 end
                 jr: begin
-
+                    GRF_WE <= 1;
+                    isjr <= 1;
                 end
                 default: begin
                     isbeq <= 0;
@@ -81,11 +83,43 @@ always @(*) begin
             endcase
         end
 
+        ori: begin
+            GRF_WE <= 1;
+            GRF_A3_MUX <= 1;
+			ALU_B_MUX <= 1;
+        end
 
+        lw : begin
+			GRF_WE <= 1;
+            GRF_A3_MUX <= 1;
+            GRF_WD_MUX <= 1;
+            ALU_B_MUX <= 1;
+            EXTOp <= 1;
+        end
 
+        sw : begin
+            ALU_B_MUX <= 1;
+            DM_WE <= 1;
+            EXTOp <= 1;
+        end
 
+        beq: begin
+            isbeq <= 1;
+        end
 
+        lui: begin
+			GRF_A3_MUX <= 1;
+			GRF_WE <= 1;
+            GRF_WD_MUX<= 2;
+            EXTOp <= 2;
+        end
 
+        jal: begin
+            isjal <= 1;
+            GRF_WE <= 1;
+            GRF_A3_MUX <= 2;
+            GRF_WD_MUX <= 3;
+        end
     endcase
 end
 

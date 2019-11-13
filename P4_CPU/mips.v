@@ -9,26 +9,35 @@ ifu IFU(.clk(clk),
         .Reset(reset),
         .isZero(ALU.Zero),
         .imm(ID.imm),
-        .jrPC(GRF.ReadData2)
+        .jrPC(GRF.ReadData1),
+        .jalPC(ID.ins_index),
+        .isbeq(Ctrl.isbeq),
+        .isjal(Ctrl.isjal),
+        .isjr(Ctrl.isjr)
        );
 
 id ID(.Instruction(IFU.Instruction));
 
 alu ALU(
         .A(GRF.ReadData1),
-        .B(ALU_B.result));
+        .B(ALU_B.result),
+        .ALUOp(Ctrl.ALUOp));
 
 mux_2_32 ALU_B(
              .option0(GRF.ReadData2),
-             .option1(EXT.D32)
+             .option1(EXT.D32),
+             .sel(Ctrl.ALU_B_MUX)
          );
 
 ext EXT(
-        .imm16(ID.imm));
+        .imm16(ID.imm),
+        .EXTOp(Ctrl.EXTOp)
+    );
 
 dm DM(
        .clk(clk),
        .Reset(reset),
+       .WriteEnable(Ctrl.DM_WE),
        .WriteAddress(ALU.C),
        .WriteData(GRF.ReadData2),
        .ReadAddress(ALU.C)
@@ -39,6 +48,7 @@ grf GRF(
         .Reset(reset),
         .ReadAddress1(ID.rs),
         .ReadAddress2(ID.rt),
+        .WriteEnable(Ctrl.GRF_WE),
         .WriteAddress(GRF_A3.result),
         .WriteData(GRF_WD.result)
     );
@@ -46,29 +56,21 @@ grf GRF(
 mux_4_5 GRF_A3(
             .option0(ID.rd),
             .option1(ID.rt),
-            .option2(5'd31)
+            .option2(5'd31),
+            .sel(Ctrl.GRF_A3_MUX)
         );
 
 mux_4_32 GRF_WD(
              .option0(ALU.C),
              .option1(DM.ReadData),
              .option2(EXT.D32),
-             .option3(IFU.PC4)
+             .option3(IFU.PC4),
+             .sel(Ctrl.GRF_WD_MUX)
          );
 
-controller Controller(
+controller Ctrl(
                .opcode(ID.opcode),
-               .funct(ID.funct),
-               .isbeq(IFU.isbeq),
-               .isjal(IFU.isjal),
-               .isjr(IFU.isjr),
-               .GRF_A3_MUX(GRF_A3.sel),
-               .GRF_WD_MUX(GRF_WD.sel),
-               .GRF_WE(GRF.WriteEnable),
-               .ALU_B_MUX(ALU_B.sel),
-               .ALUOp(ALU.ALUOp),
-               .DM_WE(DM.WriteEnable),
-               .EXTOp(EXT.EXTOp)
+               .funct(ID.funct)
            );
 
 endmodule // mips

@@ -9,8 +9,8 @@ module ext(
 always @(*) begin
     case (EXTOp)
         2'b00: D32 <= {16'd0,imm16}; 
-        2'b00: D32 <= {{16{imm16[15]}},imm16}; 
-        2'b00: D32 <= {imm16,16'd0}; 
+        2'b01: D32 <= {{16{imm16[15]}},imm16}; 
+        2'b10: D32 <= {imm16,16'd0}; 
         default: D32 <= 0;
     endcase
 end

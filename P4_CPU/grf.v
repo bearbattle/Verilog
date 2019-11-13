@@ -12,7 +12,7 @@ module grf(
            output [31:0] ReadData2
        );
 
-reg [31:0] GRF [4:0];
+reg [31:0] GRF [31:0];
 integer i;
 
 assign ReadData1 = GRF[ReadAddress1];

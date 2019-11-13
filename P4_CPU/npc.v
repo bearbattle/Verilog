@@ -7,6 +7,7 @@ module npc(
            input [15:0] imm,
            input isjr,
            input [31:0] jrPC,
+           input [25:0] jalPC,
            output reg [31:0] newPC,
            output reg [31:0] PC4
        );
@@ -26,7 +27,7 @@ always @(*) begin
         end
         3'b010: begin
             PC4 <= curPC + 4;
-            newPC <= curPC + 4 + {{16{imm[15]}},imm};
+            newPC <= {curPC[31:28], jalPC, 2'b00};
         end
         3'b001: begin
             newPC <= jrPC;

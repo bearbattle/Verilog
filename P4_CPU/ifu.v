@@ -8,6 +8,7 @@ module ifu(
            input [15:0] imm,
            input isjr,
            input [31:0] jrPC,
+           input [25:0] jalPC,
            output [31:0] Instruction,
            output [31:0] PC4,
            output [31:0] PC0
@@ -24,6 +25,7 @@ npc NPC(.curPC(PC.InstructionAddress),
         .imm(imm),
         .isjr(isjr),
         .jrPC(jrPC),
+        .jalPC(jalPC),
         .newPC(PC.nPC),
         .PC4(PC4));
 
