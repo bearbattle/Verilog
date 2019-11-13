@@ -19,7 +19,7 @@ always @(*) begin
         end
         3'b100: begin
             if(isZero) begin
-                newPC <= curPC + 4 + {{14{imm[15]}}, imm, {2{0}}};
+                newPC <= curPC + 4 + {{14{imm[15]}}, imm[15:0], 2'b00};
             end
             else
                 newPC <= curPC + 4;
