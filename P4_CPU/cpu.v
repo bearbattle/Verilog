@@ -37,6 +37,7 @@ module cpu_tb;
 always #10 clk = ~clk;
 
 	initial begin
+		$dumpvars(0, uut);
 		// Initialize Inputs
 		clk <= 0;
 		reset <= 1;
