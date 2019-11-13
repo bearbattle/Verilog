@@ -6,7 +6,7 @@ module im(
 
 reg [31:0] ROM [9:0];
 
-assign Instruction = ROM[InstructionAddress[31:2]];
+assign Instruction = ROM[InstructionAddress[11:2]];
 
 integer i;
 

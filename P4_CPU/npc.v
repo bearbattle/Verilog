@@ -12,13 +12,14 @@ module npc(
        );
 
 always @(*) begin
+	PC4 <= curPC + 4;
     case ({isbeq, isjal, isjr})
         3'b000: begin
             newPC <= curPC +4;
         end
         3'b100: begin
             if(isZero) begin
-                newPC <= curPC + 4 + {{14{imm[15]}}, imm, 2{0}};
+                newPC <= curPC + 4 + {{14{imm[15]}}, imm, {2{0}}};
             end
             else
                 newPC <= curPC + 4;
