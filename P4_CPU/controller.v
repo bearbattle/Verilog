@@ -65,7 +65,6 @@ always @(*) begin
                     ALUOp <= 1;
                 end
                 jr: begin
-                    GRF_WE <= 1;
                     isjr <= 1;
                 end
                 default: begin
@@ -86,11 +85,12 @@ always @(*) begin
         ori: begin
             GRF_WE <= 1;
             GRF_A3_MUX <= 1;
-			ALU_B_MUX <= 1;
+            ALU_B_MUX <= 1;
+            ALUOp <= 2;
         end
 
         lw : begin
-			GRF_WE <= 1;
+            GRF_WE <= 1;
             GRF_A3_MUX <= 1;
             GRF_WD_MUX <= 1;
             ALU_B_MUX <= 1;
@@ -108,8 +108,8 @@ always @(*) begin
         end
 
         lui: begin
-			GRF_A3_MUX <= 1;
-			GRF_WE <= 1;
+            GRF_A3_MUX <= 1;
+            GRF_WE <= 1;
             GRF_WD_MUX<= 2;
             EXTOp <= 2;
         end
@@ -119,6 +119,19 @@ always @(*) begin
             GRF_WE <= 1;
             GRF_A3_MUX <= 2;
             GRF_WD_MUX <= 3;
+        end
+
+        default: begin
+            isbeq <= 0;
+            isjal <= 0;
+            isjr <= 0;
+            GRF_A3_MUX <= 0;
+            GRF_WD_MUX <= 0;
+            GRF_WE <= 0;
+            ALU_B_MUX <= 0;
+            ALUOp <= 0;
+            DM_WE <= 0;
+            EXTOp <= 0;
         end
     endcase
 end
