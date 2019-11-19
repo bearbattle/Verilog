@@ -109,7 +109,8 @@ always @(*) begin
 
         lui: begin
             GRF_A3_MUX <= 1;
-            GRF_WE <= 1;例如
+            GRF_WE <= 1;
+            GRF_WD_MUX<= 2;
             EXTOp <= 2;
         end
 
