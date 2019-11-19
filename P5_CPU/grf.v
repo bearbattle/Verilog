@@ -2,38 +2,38 @@
 
 module grf(
            input clk,
-           input Reset,
-           input WriteEnable,
-           input [4:0] ReadAddress1,
-           input [4:0] ReadAddress2,
-           input [4:0] WriteAddress,
-           input [31:0] WriteData,
-           output [31:0] ReadData1,
-           output [31:0] ReadData2
+           input rst,
+           input Wr,
+           input [4:0] A1,
+           input [4:0] A2,
+           input [4:0] A3,
+           input [31:0] WD,
+           output [31:0] RD1,
+           output [31:0] RD2
        );
 
 reg [31:0] GRF [31:0];
 integer i;
 
-assign ReadData1 = GRF[ReadAddress1];
-assign ReadData2 = GRF[ReadAddress2];
+assign RD1 = GRF[A1];
+assign RD2 = GRF[A2];
 
 initial begin
     for(i = 0; i < 32; i = i + 1) begin
-        GRF[i] <= 0;
+        GRF[i] = 0;
     end
 end
 
 always @(posedge clk) begin
-    if (Reset) begin
+    if (rst) begin
         for(i = 0; i < 32; i = i + 1) begin
-            GRF[i] <= 0;
+            GRF[i] = 0;
         end
     end
     else begin
-        if(WriteEnable && WriteAddress != 0) begin
-            GRF[WriteAddress] <= WriteData;
-            $display("@%h: $%d <= %h", IFU.PC0, WriteAddress,WriteData);
+        if(Wr && A3 != 0) begin
+            GRF[A3] = WD;
+            $display("%d@%h: $%d <= %h", $time, W.PC4 - 4, A3,WD);
         end
     end
 end

@@ -1,35 +1,34 @@
 `timescale 1ns / 1ps
 module dm(
            input clk,
-           input Reset,
-           input WriteEnable,
-           input [31:0] WriteAddress,
-           input [31:0] WriteData,
-           input [31:0] ReadAddress,
-           output [31:0] ReadData
+           input rst,
+           input Wr,
+           input [31:0] A,
+           input [31:0] WD,
+           output [31:0] DR
        );
 
 reg [31:0] RAM [1023:0];
 integer i;
 
-assign ReadData = RAM[ReadAddress[31:2]];
+assign DR = RAM[A[31:2]];
 
 initial begin
     for (i = 0; i < 1024; i = i + 1) begin
-        RAM[i] <= 32'h00000000;
+        RAM[i] = 32'h00000000;
     end
 end
 
 always @(posedge clk ) begin
-    if (Reset) begin
+    if (rst) begin
         for (i = 0; i < 1024; i = i + 1) begin
-            RAM[i] <= 32'h00000000;
+            RAM[i] = 32'h00000000;
         end
     end
     else begin
-        if(WriteEnable) begin
-            RAM[WriteAddress[31:2]] = WriteData;
-				$display("@%h: *%h <= %h", IFU.PC0, WriteAddress, WriteData);
+        if(Wr) begin
+            RAM[A[31:2]] = WD;
+				$display("%d@%h: *%h <= %h", $time, M.PC4 - 4, A,WD);
         end
     end
 end

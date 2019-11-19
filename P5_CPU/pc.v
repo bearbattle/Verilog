@@ -1,21 +1,23 @@
 `timescale 1ns / 1ps
 module pc(
            input clk,
-           input Reset,
+           input rst,
+           input enPC,
            input [31:0] NPC,
-           output reg [31:0] InstructionAddress
+           output reg [31:0] PC
        );
 
 initial begin
-    InstructionAddress <= 32'h00003000;
+    PC = 32'h00003000;
 end
 
 always @(posedge clk ) begin
-    if (Reset) begin
-        InstructionAddress <= 32'h00003000;
+    if (rst) begin
+        PC = 32'h00003000;
     end
     else begin
-        InstructionAddress <= nPC;
+        if(enPC)
+            PC = NPC;
     end
 end
 
