@@ -1,20 +1,20 @@
 `timescale 1ns / 1ps
 
-module mux_2_6(
-           input sel,
-           input [5:0] option0,
-           input [5:0] option1,
-           output reg [5:0] result
-       );
-
-always @(*) begin
-    if(sel)
-        result = option1;
-    else
-        result = option0;
-end
-
-endmodule
+//module mux_2_6(
+//           input sel,
+//           input [5:0] option0,
+//           input [5:0] option1,
+//           output reg [5:0] result
+//       );
+//
+//always @(*) begin
+//    if(sel)
+//        result = option1;
+//    else
+//        result = option0;
+//end
+//
+//endmodule
 
 
     module mux_4_5(

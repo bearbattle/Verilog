@@ -19,10 +19,14 @@ wire stall_s;
 
 wire stall;
 
-assign stall_b_c_r = (IRD[`OP] == `beq) && (IRE[`OP] == `R) && ((IRD[`RS] == IRE[`RD]) || (IRD[`RT] == IRE[`RD]));
-assign stall_b_c_i = (IRD[`OP] == `beq) && ((IRE[`OP] == `ori) || (IRE[`OP] == `lui)) && ((IRD[`RS] == IRE[`RT]) || (IRD[`RT] == IRE[`RT]));
-assign stall_b_l_E = (IRD[`OP] == `beq) && (IRE[`OP] == `R) && ((IRD[`RS] == IRE[`RD]) || (IRD[`RT] == IRE[`RD]));
-assign stall_b_l_M = (IRD[`OP] == `beq) && (IRM[`OP] == `R) && ((IRM[`RS] == IRE[`RD]) || (IRM[`RT] == IRE[`RD]));
+assign stall_b_c_r = (IRD[`OP] == `beq) &&
+            (IRE[`OP] == `R) && ((IRD[`RS] == IRE[`RD]) || (IRD[`RT] == IRE[`RD]));
+assign stall_b_c_i = (IRD[`OP] == `beq) &&
+            ((IRE[`OP] == `ori) || (IRE[`OP] == `lui)) && ((IRD[`RS] == IRE[`RT]) || (IRD[`RT] == IRE[`RT]));
+assign stall_b_l_E = (IRD[`OP] == `beq) &&
+            (IRE[`OP] == `R) && ((IRD[`RS] == IRE[`RD]) || (IRD[`RT] == IRE[`RD]));
+assign stall_b_l_M = (IRD[`OP] == `beq) &&
+            (IRM[`OP] == `R) && ((IRM[`RS] == IRE[`RD]) || (IRM[`RT] == IRE[`RD]));
 assign stall_b = stall_b_c_r || stall_b_c_i || stall_b_l_E || stall_b_l_M;
 
 assign stall_c_r = ( (IRD[`OP] == `R) ) &&
@@ -45,7 +49,7 @@ assign FlushE = stall;
 
 endmodule
 
-    module forward(
+    module ForwardController(
         input [31:0] IRD,
         input [31:0] IRE,
         input [31:0] IRM,

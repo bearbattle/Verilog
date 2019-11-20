@@ -3,7 +3,11 @@
 
 module DController(
            input [31:0] IR,
-           output [1:0] EXTOp
+           input Zero,
+           output [1:0] EXTOp,
+           output isj,
+           output isb,
+           output [1:0] PCSel
        );
 
 wire opcode = IR[31:26];
@@ -11,6 +15,11 @@ wire opcode = IR[31:26];
 assign EXTOp = opcode == `lui ? `HE :
        opcode == `ori ? `UE : `SE;
 
+assign isj = (opcode == `jal || opcode == `j);
+assign isb = (opcode == `beq) && Zero;
+
+assign PCSel = (IR[`OP] == `R && IR[`FT] == `jr) ? 2'd2 :
+            ((IR[`OP] == `beq) || (IR[`OP] == `jal) || (IR[`OP] == `j)) ? 2'd1 : 2'd0;
 endmodule
 
     module EController(

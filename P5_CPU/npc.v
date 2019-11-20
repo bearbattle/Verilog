@@ -1,28 +1,21 @@
 `timescale 1ns / 1ps
 
 module npc(
-           input [31:0] PC,
+           input [31:0] PC4,
            input isb,
-           input isjal,
+           input isj,
            input [25:0] imm,
-           input isjr,
-           input [31:0] RA,
-           output reg [31:0] NPC,
-           output reg [31:0] PC4
+           output reg [31:0] NPC
        );
 
 always @(*) begin
-    PC4 = PC + 4;
-
-    case ({isb, isjal, isjr})
-        3'b100:
-            NPC = PC + 4 + {{16{imm[15]}},imm[15:0]};
-        3'b010:
-            NPC = {PC[31:26],imm[25:0]};
-        3'b001:
-            NPC = RA;
+    case ({isb, isj})
+        3'b10:
+            NPC = PC4 + {{16{imm[15]}},imm[15:0]};
+        3'b01:
+            NPC = {PC4[31:26],imm[25:0]};
         default:
-            NPC = PC + 4;
+            NPC = PC4;
     endcase
 end
 

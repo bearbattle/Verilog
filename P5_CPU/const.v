@@ -19,6 +19,7 @@
 `define beq 6'b000100
 `define lui 6'b001111
 `define jal 6'b000011
+`define j   6'b000010
 
 `define addu 6'b100001
 `define subu 6'b100011

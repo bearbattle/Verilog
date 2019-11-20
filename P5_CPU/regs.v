@@ -5,7 +5,7 @@
 module regD(
         input clk,
         input enD,
-        input FlushD,
+        input rst,
         input [31:0] IR,
         input [31:0] PC4,
         output reg [31:0] IRD,
@@ -21,7 +21,7 @@ always @(posedge clk) begin
         IRD = IR;
         PC4D = PC4;
     end
-    if(FlushD) begin
+    if(rst) begin
         IRD = 0;
         PC4D = 0;
     end
@@ -73,6 +73,7 @@ endmodule
 
 module regM(
     input clk,
+    input rst,
     input [31:0] IR,
     input [31:0] PC4,
     input [31:0] RT,
@@ -95,34 +96,47 @@ always @(posedge clk) begin
     PC4M = PC4;
     RTM = RTM;
     AOM = AO;
+    if(rst) begin
+        IRM = 0;
+        PC4M = 0;
+        RTM = 0;
+        AOM = 0;
+    end
 end
 
 endmodule // regM
 
 module regW(
     input clk,
+    input rst,
     input [31:0] IR,
     input [31:0] PC4,
     input [31:0] DR,
     input [31:0] AO,
-    output reg [31:0] IRM,
-    output reg [31:0] PC4M,
-    output reg [31:0] DRM,
-    output reg [31:0] AOM
+    output reg [31:0] IRW,
+    output reg [31:0] PC4W,
+    output reg [31:0] DRW,
+    output reg [31:0] AOW
 );
 
 initial begin
-    IRM = 0;
-    PC4M = 0;
-    DRM = 0;
-    AOM = 0;
+    IRW = 0;
+    PC4W = 0;
+    DRW = 0;
+    AOW = 0;
 end
 
 always @(posedge clk) begin
-    IRM = IR;
-    PC4M = PC4;
-    DRM = DR;
-    AOM = AO;
+    IRW = IR;
+    PC4W = PC4;
+    DRW = DR;
+    AOW = AO;
+    if(rst) begin
+        IRW = 0;
+        PC4W = 0;
+        DRW = 0;
+        AOW = 0;
+    end
 end
 
 endmodule // regW
