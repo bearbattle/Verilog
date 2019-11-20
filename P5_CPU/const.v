@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 `define OP 31:26
 `define FT 5:0
 `define RS 25:21

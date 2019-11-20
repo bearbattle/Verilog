@@ -120,3 +120,15 @@ assign enD = ~stall;
 assign FlushE = stall;
 
 endmodule
+
+    module forward(
+        input [31:0] IRD,
+        input [31:0] IRE,
+        input [31:0] IRM,
+        output reg [1:0] FPCSel,
+        output reg [1:0] FPCSel,
+        output reg [1:0] FPCSel,
+        output reg [1:0] FPCSel
+    );
+
+endmodule

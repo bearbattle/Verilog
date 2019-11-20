@@ -60,8 +60,6 @@ always @(posedge clk) begin
     RSE = RS;
     RTE = RT;
     D32E = D32;
-    A3 = 0;
-    FVal = 0;
     if(FlushE) begin
         IRE = 0;
         PC4E = 0;
@@ -107,10 +105,10 @@ module regW(
     input [31:0] PC4,
     input [31:0] DR,
     input [31:0] AO,
-    output [31:0] IRM,
-    output [31:0] PC4M,
-    output [31:0] DRM,
-    output [31:0] AOM
+    output reg [31:0] IRM,
+    output reg [31:0] PC4M,
+    output reg [31:0] DRM,
+    output reg [31:0] AOM
 );
 
 initial begin
@@ -123,7 +121,7 @@ end
 always @(posedge clk) begin
     IRM = IR;
     PC4M = PC4;
-    DRM = RTM;
+    DRM = DR;
     AOM = AO;
 end
 
