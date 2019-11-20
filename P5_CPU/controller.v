@@ -125,10 +125,36 @@ endmodule
         input [31:0] IRD,
         input [31:0] IRE,
         input [31:0] IRM,
-        output reg [1:0] FPCSel,
-        output reg [1:0] FPCSel,
-        output reg [1:0] FPCSel,
-        output reg [1:0] FPCSel
+        input [31:0] IRW,
+        output reg [2:0] FRSDSel,
+        output reg [2:0] FRTDSel,
+        output reg [2:0] FRSESel,
+        output reg [2:0] FRTESEl,
+        output reg [2:0] FRTMSel
     );
+
+initial begin
+    FRSDSel = 0;
+    FRTDSel = 0;
+    FRSESel = 0;
+    FRTESEl = 0;
+    FRTMSel = 0;
+end
+
+always @(*) begin
+    FRSDSel = 0;
+    FRTDSel = 0;
+    FRSESel = 0;
+    FRTESEl = 0;
+    FRTMSel = 0;
+    if(IRD[`OP] == beq || (IRD[`OP] == `R && IRD[`FT] == `jr)) begin
+        case(IRM[`OP])
+            `R: begin
+                if(IRM[`FT] != `jr)
+                    FRSDSel = 4;
+            end
+            
+        endcase
+    end
 
 endmodule
