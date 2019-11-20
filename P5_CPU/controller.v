@@ -1,24 +1,5 @@
 `timescale 1ns / 1ps
-
-`define ADD 2'b00
-`define SUB 2'b01
-`define OR  2'b10
-
-`define UE 2'b00
-`define SE 2'b01
-`define HE 2'b10
-
-`define R   6'b000000
-`define ori 6'b001101
-`define lw  6'b100011
-`define sw  6'b101011
-`define beq 6'b000100
-`define lui 6'b001111
-`define jal 6'b000011
-
-`define addu 6'b100001
-`define subu 6'b100011
-`define jr   6'b001000
+`include "const.v"
 
 module DController(
            input [31:0] IR,
@@ -87,7 +68,7 @@ endmodule
         output FlushE
     );
 
-wire stall_b, stall_b_c_r, stall_b_c_i, stall_b_l;
+wire stall_b, stall_b_c_r, stall_b_c_i, stall_b_l_E, stall_b_l_M;
 wire stall_c_r;
 wire stall_c_i;
 wire stall_l;
@@ -116,8 +97,9 @@ wire [4:0] IRMRD = IRM[15:11];
 
 assign stall_b_c_r = (IRDOP == `beq) && (IREOP == `R) && ((IRDRS == IRERD) || (IRDRT == IRERD));
 assign stall_b_c_i = (IRDOP == `beq) && ((IREOP == `ori) || (IREOP == `lui)) && ((IRDRS == IRERT) || (IRDRT == IRERT));
-assign stall_b_l = (IRDOP == `beq) && (IREOP == `R) && ((IRDRS == IRERD) || (IRDRT == IRERD));
-assign stall_b = stall_b_c_r || stall_b_c_i || stall_b_l;
+assign stall_b_l_E = (IRDOP == `beq) && (IREOP == `R) && ((IRDRS == IRERD) || (IRDRT == IRERD));
+assign stall_b_l_M = (IRDOP == `beq) && (IRMOP == `R) && ((IRMRS == IRERD) || (IRMRT == IRERD));
+assign stall_b = stall_b_c_r || stall_b_c_i || stall_b_l_E || stall_b_l_M;
 
 assign stall_c_r = ( (IRDOP == `R) ) &&
        ((IREOP == `lw) && ((IRERT == IRDRS) || (IRERT == IRDRT)));
@@ -138,4 +120,3 @@ assign enD = ~stall;
 assign FlushE = stall;
 
 endmodule
-

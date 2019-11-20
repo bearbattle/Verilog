@@ -1,5 +1,7 @@
 `timescale 1ns / 1ps
 
+`include "const.v"
+
 module regD(
         input clk,
         input enD,
@@ -37,11 +39,11 @@ module regE(
     input [31:0] RS,
     input [31:0] RT,
     input [31:0] D32,
-    output [31:0] IRE,
-    output [31:0] PC4E,
-    output [31:0] RSE,
-    output [31:0] RTE,
-    output [31:0] D32E
+    output reg [31:0] IRE,
+    output reg [31:0] PC4E,
+    output reg [31:0] RSE,
+    output reg [31:0] RTE,
+    output reg [31:0] D32E
 );
 
 initial begin
@@ -58,6 +60,8 @@ always @(posedge clk) begin
     RSE = RS;
     RTE = RT;
     D32E = D32;
+    A3 = 0;
+    FVal = 0;
     if(FlushE) begin
         IRE = 0;
         PC4E = 0;
@@ -75,10 +79,10 @@ module regM(
     input [31:0] PC4,
     input [31:0] RT,
     input [31:0] AO,
-    output [31:0] IRM,
-    output [31:0] PC4M,
-    output [31:0] RTM,
-    output [31:0] AOM
+    output reg [31:0] IRM,
+    output reg [31:0] PC4M,
+    output reg [31:0] RTM,
+    output reg [31:0] AOM
 );
 
 initial begin
@@ -124,3 +128,4 @@ always @(posedge clk) begin
 end
 
 endmodule // regW
+

@@ -15,8 +15,8 @@ module grf(
 reg [31:0] GRF [31:0];
 integer i;
 
-assign RD1 = GRF[A1];
-assign RD2 = GRF[A2];
+assign RD1 = A1 == A3 ? WD : GRF[A1];
+assign RD2 = A2 == A3 ? WD : GRF[A2];
 
 initial begin
     for(i = 0; i < 32; i = i + 1) begin
