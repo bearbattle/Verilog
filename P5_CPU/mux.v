@@ -84,3 +84,32 @@ always @(*) begin
 end
 
 endmodule //
+
+module mux_5_32(
+        input [2:0] sel,
+        input [31:0] option0,
+        input [31:0] option1,
+        input [31:0] option2,
+        input [31:0] option3,
+        input [31:0] option4,
+        output reg [31:0] result
+    );
+
+always @(*) begin
+    case (sel)
+        3'd0:
+            result = option0;
+        3'd1:
+            result = option1;
+        3'd2:
+            result = option2;
+        3'd3:
+            result = option3;
+        3'd4:
+            result = option4;
+        default:
+            result = 32'd0;
+    endcase
+end
+
+endmodule //
