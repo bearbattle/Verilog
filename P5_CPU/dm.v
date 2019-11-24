@@ -11,7 +11,7 @@ module dm(
 reg [31:0] RAM [1023:0];
 integer i;
 
-assign DR = RAM[A[31:2]];
+assign DR = RAM[A[11:2]];
 
 initial begin
     for (i = 0; i < 1024; i = i + 1) begin
@@ -22,13 +22,13 @@ end
 always @(posedge clk ) begin
     if (rst) begin
         for (i = 0; i < 1024; i = i + 1) begin
-            RAM[i] = 32'h00000000;
+            RAM[i] <= 32'h00000000;
         end
     end
     else begin
         if(Wr) begin
-            RAM[A[31:2]] = WD;
-				$display("%d@%h: *%h <= %h", $time, M.PC4 - 4, A,WD);
+            RAM[A[11:2]] <= WD;
+			$display("@%h: *%h <= %h", M.PCM, A,WD);
         end
     end
 end

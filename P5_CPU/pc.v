@@ -13,11 +13,11 @@ end
 
 always @(posedge clk ) begin
     if (rst) begin
-        PC = 32'h00003000;
+        PC <= 32'h00003000;
     end
     else begin
         if(enPC)
-            PC = NPC;
+            PC <= NPC;
     end
 end
 

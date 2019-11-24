@@ -10,16 +10,14 @@ module DController(
            output [1:0] PCSel
        );
 
-wire opcode = IR[31:26];
+assign EXTOp = IR[`OP] == `lui ? `HE :
+       IR[`OP] == `ori ? `UE : `SE;
 
-assign EXTOp = opcode == `lui ? `HE :
-       opcode == `ori ? `UE : `SE;
-
-assign isj = (opcode == `jal || opcode == `j);
-assign isb = (opcode == `beq) && Zero;
+assign isj = (IR[`OP] == `jal || IR[`OP] == `j);
+assign isb = (IR[`OP] == `beq) && Zero;
 
 assign PCSel = (IR[`OP] == `R && IR[`FT] == `jr) ? 2'd2 :
-            ((IR[`OP] == `beq) || (IR[`OP] == `jal) || (IR[`OP] == `j)) ? 2'd1 : 2'd0;
+       ((IR[`OP] == `beq) || (IR[`OP] == `jal) || (IR[`OP] == `j)) ? 2'd1 : 2'd0;
 endmodule
 
     module EController(
@@ -28,14 +26,12 @@ endmodule
         output BSel
     );
 
-wire opcode = IR[31:26];
-wire funct = IR[5:0];
 
-assign ALUOp = (opcode == `lui) || (opcode == `ori) ? `OR :
-       (opcode != `R) ? `ADD :
-       (funct == `SUB) ? `SUB : `ADD;
+assign ALUOp = (IR[`OP] == `lui) || (IR[`OP] == `ori) ? `OR :
+       (IR[`OP] != `R) ? `ADD :
+       (IR[`FT] == `subu) ? `SUB : `ADD;
 
-assign BSel = (opcode == `lui) || (opcode == `ori) || (opcode == `lw) || (opcode == `sw) ? 1 : 0;
+assign BSel = (IR[`OP] == `lui) || (IR[`OP] == `ori) || (IR[`OP] == `lw) || (IR[`OP] == `sw) ? 1 : 0;
 
 endmodule
 
@@ -44,9 +40,8 @@ endmodule
         output DMWr
     );
 
-wire opcode = IR[31:26];
 
-assign DMWr = opcode == `sw ? 1 : 0;
+assign DMWr = IR[`OP] == `sw ? 1 : 0;
 
 endmodule
 
@@ -57,13 +52,10 @@ endmodule
         output [1:0] WDSel
     );
 
-wire opcode = IR[31:26];
-wire funct = IR[5:0];
-
-assign RFWr = (opcode == `lui) || (opcode == `ori) || (opcode == `lw) || (opcode == `R && funct != `jr) || (opcode == `jal) ? 1 : 0;
-assign WRSel = (opcode == `lw) || (opcode == `ori) || (opcode == `lui) ? 0 :
-       (opcode == `jal) ? 2 : 1;
-assign WDSel =  (opcode == `lw) ? 0 :
-       (opcode == `jal) ? 2 : 1;
+assign RFWr = (IR[`OP] == `lui) || (IR[`OP] == `ori) || (IR[`OP] == `lw) || (IR[`OP] == `R && IR[`FT] != `jr) || (IR[`OP] == `jal) ? 1 : 0;
+assign WRSel = (IR[`OP] == `lw) || (IR[`OP] == `ori) || (IR[`OP] == `lui) ? 0 :
+       (IR[`OP] == `jal) ? 2 : 1;
+assign WDSel =  (IR[`OP] == `lw) ? 0 :
+       (IR[`OP] == `jal) ? 2 : 1;
 
 endmodule
