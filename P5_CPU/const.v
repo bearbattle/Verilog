@@ -24,3 +24,11 @@
 `define addu 6'b100001
 `define subu 6'b100011
 `define jr   6'b001000
+
+`define ADD4    2'd0
+`define NPC     2'd1
+`define JRPC    2'd2
+
+`define DR  2'd0
+`define AO  2'd1
+`define PC  2'd2

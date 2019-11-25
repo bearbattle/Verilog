@@ -28,7 +28,7 @@ always @(posedge clk ) begin
     else begin
         if(Wr) begin
             RAM[A[11:2]] <= WD;
-			$display("@%h: *%h <= %h", M.PCM, A,WD);
+			$display("%d@%h: *%h <= %h",$time, M.PCM, A,WD);
         end
     end
 end

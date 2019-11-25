@@ -5,12 +5,13 @@ module mips(
            input reset
        );
 // Controller
-ForwardController FCtrl(
-                      .IRD(D.IRD),
-                      .IRE(E.IRE),
-                      .IRM(M.IRM),
-                      .IRW(W.IRW)
-                  );
+// ForwardController FCtrl(
+//                       .IRD(D.IRD),
+//                       .IRE(E.IRE),
+//                       .IRM(M.IRM),
+//                       .IRW(W.IRW)
+//                   );
+ForwardController FCtrl();
 
 // StallController SCtrl(
 //                     .IRD(D.IRD),
@@ -49,7 +50,7 @@ regD D(.clk(clk),
        .Tnew(AT.Tnew),
        .Tuse1(AT.Tuse1),
        .Tuse2(AT.Tuse2)
-       );
+      );
 
 //ID
 
@@ -104,6 +105,8 @@ regE E(
          .RS(MFRSD.result),
          .RT(MFRTD.result),
          .D32(EXT.D32),
+         .A1(D.A1D),
+         .A2(D.A2D),
          .A3(D.A3D),
          .Tnew(D.TnewD)
      );
@@ -149,6 +152,7 @@ regM M(.clk(clk),
        .AO(ALU.C),
        .RT(MFRTE.result),
        .A3(E.A3E),
+       .A2(E.A2E),
        .Tnew(E.TnewE)
       );
 

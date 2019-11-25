@@ -35,7 +35,7 @@ always @(*) begin
                     A1 = IR[`RS];
                     A2 = IR[`RT];
                     A3 = IR[`RD];
-                    Tnew = 1;
+                    Tnew = 2;
                     Tuse1 = 1;
                     Tuse2 = 1;
                 end
@@ -44,14 +44,14 @@ always @(*) begin
                     A1 = IR[`RS];
                     A2 = IR[`RT];
                     A3 = IR[`RD];
-                    Tnew = 1;
+                    Tnew = 2;
                     Tuse1 = 1;
                     Tuse2 = 1;
                 end
                 // jr
                 `jr: begin
                     A1 = IR[`RS];
-                    Tuse1 = 1;
+                    Tuse1 = 0;
                 end
                 default: begin
                 end
@@ -62,14 +62,14 @@ always @(*) begin
         `ori: begin
             A1 = IR[`RS];
             A3 = IR[`RT];
-            Tnew = 1;
+            Tnew = 2;
             Tuse1 = 1;
         end
 
         `lui: begin
             A1 = IR[`RS];
             A3 = IR[`RT];
-            Tnew = 1;
+            Tnew = 2;
             Tuse1 = 1;
         end
 
@@ -79,17 +79,11 @@ always @(*) begin
             Tnew = 0;
         end
 
-        //  jr
-        `jr: begin
-            A1 = IR[`RS];
-            Tuse1 = 1;
-        end
-
         // b
         `beq: begin
             A1 = IR[`RS];
             A2 = IR[`RT];
-            Tuse1 = 1;
+            Tuse1 = 0;
             Tuse2 = 0;
         end
 
@@ -97,7 +91,7 @@ always @(*) begin
         `lw: begin
             A1 = IR[`RS];
             A3 = IR[`RT];
-            Tnew = 2;
+            Tnew = 3;
             Tuse1 = 1;
         end
 
