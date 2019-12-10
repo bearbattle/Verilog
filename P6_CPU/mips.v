@@ -86,19 +86,15 @@ npc NPC(.isb(DCtrl.isb),
 mux_5_32 MFRSD(
              .sel(FCtrl.FRSDSel),
              .option0(RF.RD1),
-             .option1(M4.result),
-             .option2(W.PCW + 8),
-             .option3(M.AOM),
-             .option4(M.PCM + 8)
+             .option1(W.WDW),
+             .option2(M.WDM)
          );
 
 mux_5_32 MFRTD(
              .sel(FCtrl.FRTDSel),
              .option0(RF.RD2),
-             .option1(M4.result),
-             .option2(W.PCW + 8),
-             .option3(M.AOM),
-             .option4(M.PCM + 8)
+             .option1(W.WDW),
+             .option2(M.WDM)
          );
 
 // ID/EX
@@ -126,6 +122,14 @@ alu ALU(.A(MFRSE.result),
         .s(E.IRE[10:6]),
         .ALUOp(ECtrl.ALUOp));
 
+mdu MDU(.clk(clk),
+        .rst(reset),
+        .D1(MFRSE.result),
+        .D2(MFRTE.result),
+        .enMDU(ECtrl.enMDU),
+        .MDUOp(ECtrl.MDUOp)
+);
+
 mux_2_32 M2(
              .sel(ECtrl.BSel),
              .option0(MFRTE.result),
@@ -135,19 +139,15 @@ mux_2_32 M2(
 mux_5_32 MFRSE(
              .sel(FCtrl.FRSESel),
              .option0(E.RSE),
-             .option1(M4.result),
-             .option2(W.PCW + 8),
-             .option3(M.AOM),
-             .option4(M.PCM + 8)
+             .option1(W.WDW),
+             .option2(M.WDM)
          );
 
 mux_5_32 MFRTE(
              .sel(FCtrl.FRTESel),
              .option0(E.RTE),
-             .option1(M4.result),
-             .option2(W.PCW + 8),
-             .option3(M.AOM),
-             .option4(M.PCM + 8)
+             .option1(W.WDW),
+             .option2(M.WDM)
          );
 
 // EX/MEM
@@ -160,26 +160,29 @@ regM M(.clk(clk),
        .RT(MFRTE.result),
        .A3(E.A3E),
        .A2(E.A2E),
-       .Tnew(E.TnewE)
+       .Tnew(E.TnewE),
+       .WDSel(ECtrl.WDSel)
       );
 
 // MEM
 
 MController MCtrl(.IR(M.IRM));
 
+be BE(.A(M.AOM));
+
 dm DM(
        .clk(clk),
        .rst(reset),
        .A(M.AOM),
        .WD(MFRTM.result),
+       .be(BE.BE),
        .Wr(MCtrl.DMWr)
    );
 
 mux_5_32 MFRTM(
              .sel(FCtrl.FRTMSel),
              .option0(M.RTM),
-             .option1(M4.result),
-             .option2(W.PCW + 8)
+             .option1(W.WDW)
          );
 
 // MEM/WB
@@ -192,7 +195,9 @@ regW W(
          .DR(DM.DR),
          .AO(M.AOM),
          .A3(M.A3M),
-         .Tnew(M.TnewM)
+         .Tnew(M.TnewM),
+         .MD(M.MD),
+         .WDSel(MCtrl.WDSel)
      );
 
 // WB

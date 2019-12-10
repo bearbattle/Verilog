@@ -26,7 +26,9 @@ module regM(
            // output reg [2:0] Tuse1M,
            // output reg [2:0] Tuse2M
            input [1:0] WDSel,
-           output reg [31:0] WDM
+           output reg [31:0] WDM,
+           input [31:0] MD,
+           output reg [31:0] MDM
        );
 
 initial begin
@@ -41,6 +43,7 @@ initial begin
     // Tuse1M = 0;
     // Tuse2M = 0;
     WDM <= 0;
+    MDM <= 0;
 end
 
 always @(posedge clk) begin
@@ -56,6 +59,7 @@ always @(posedge clk) begin
         // Tuse1M <= 0;
         // Tuse2M <= 0;
         WDM <= 0;
+        MDM <= 0;
     end
     else begin
         IRM <= IR;
@@ -65,6 +69,7 @@ always @(posedge clk) begin
         // A1M <= A1;
         A2M <= A2;
         A3M <= A3;
+        MDM <= MD;
         TnewM <= Tnew > 0 ? Tnew - 1 : 0;
         // Tuse1M <= Tuse1;
         // Tuse2M <= Tuse2;

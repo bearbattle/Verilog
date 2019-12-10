@@ -88,104 +88,40 @@ always @(*) begin
 
     // D A1
     if (D.A1D != 0) begin
-        if (M.A3M == D.A1D && M.TnewM == 0) begin
-            if (M.IRM[`OP] == `jal || M.IRM[`OP] == `jalr) begin
-                FRSDSel = 4;
-            end
-            else begin
-                FRSDSel = 3;
-            end
-        end
-        else begin
-            if (W.A3W == D.A1D && W.TnewW == 0) begin
-                if (W.IRW[`OP] == `jal || W.IRW[`OP] == `jalr) begin
-                    FRSDSel = 2;
-                end
-                else begin
-                    FRSDSel = 1;
-                end
-            end
-        end
+        if (M.A3M == D.A1D && M.TnewM == 0)
+            FRSDSel = 2;
+        else if (W.A3W == D.A1D && W.TnewW == 0) 
+            FRSDSel = 1;
     end
-
 
     // D A2
     if (D.A2D != 0) begin
-        if (M.A3M == D.A2D && M.TnewM == 0) begin
-            if (M.IRM[`OP] == `jal || M.IRM[`OP] == `jalr) begin
-                FRTDSel = 4;
-            end
-            else begin
-                FRTDSel = 3;
-            end
-        end
-        else begin
-            if (W.A3W == D.A2D && W.TnewW == 0) begin
-                if (W.IRW[`OP] == `jal || W.IRW[`OP] == `jalr) begin
-                    FRTDSel = 2;
-                end
-                else begin
-                    FRTDSel = 1;
-                end
-            end
-        end
+        if (M.A3M == D.A2D && M.TnewM == 0)
+            FRTDSel = 2;
+        else if (W.A3W == D.A2D && W.TnewW == 0)
+            FRTDSel = 1;
     end
 
     // E A1
     if(E.A1E != 0) begin
-        if (M.A3M == E.A1E && M.TnewM == 0) begin
-            if (M.IRM[`OP] == `jal || M.IRM[`OP] == `jalr) begin
-                FRSESel = 4;
-            end
-            else begin
-                FRSESel = 3;
-            end
-        end
-        else begin
-            if (W.A3W == E.A1E && W.TnewW == 0) begin
-                if (W.IRW[`OP] == `jal || W.IRW[`OP] == `jalr) begin
-                    FRSESel = 2;
-                end
-                else begin
-                    FRSESel = 1;
-                end
-            end
-        end
+        if (M.A3M == E.A1E && M.TnewM == 0)
+            FRSESel = 2;
+        else if (W.A3W == E.A1E && W.TnewW == 0)
+            FRSESel = 1;
     end
 
     // E A2
     if(E.A2E != 0) begin
-        if (M.A3M == E.A2E && M.TnewM == 0) begin
-            if (M.IRM[`OP] == `jal || M.IRM[`OP] == `jalr) begin
-                FRTESel = 4;
-            end
-            else begin
-                FRTESel = 3;
-            end
-        end
-        else begin
-            if (W.A3W == E.A2E && W.TnewW == 0) begin
-                if (W.IRW[`OP] == `jal || W.IRW[`OP] == `jalr) begin
-                    FRTESel = 2;
-                end
-                else begin
-                    FRTESel = 1;
-                end
-            end
-        end
+        if (M.A3M == E.A2E && M.TnewM == 0)
+            FRTESel = 2;
+        else if (W.A3W == E.A2E && W.TnewW == 0)
+            FRTESel = 1;
     end
 
     // M A2
-    if(M.A2M != 0) begin
-        if (W.A3W == M.A2M && W.TnewW == 0) begin
-            if (W.IRW[`OP] == `jal || W.IRW[`OP] == `jalr) begin
-                FRTMSel = 2;
-            end
-            else begin
-                FRTMSel = 1;
-            end
-        end
-    end
+    if(M.A2M != 0)
+        if (W.A3W == M.A2M && W.TnewW == 0)
+            FRTMSel = 1;
 end
 
 endmodule

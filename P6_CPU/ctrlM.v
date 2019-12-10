@@ -5,7 +5,7 @@
 module MController(
            input [31:0] IR,
            output DMWr,
-           output [1:0] WDSel
+           output reg [1:0] WDSel
        );
 
 

@@ -14,11 +14,11 @@ module mdu(
            output reg [31:0] OUT
        );
 
-reg [31:0] HI0, LO0;
+reg [31:0] HI, LO;
 
 initial begin
-    HI0 = 0;
-    LO0 = 0;
+    HI = 0;
+    LO = 0;
     Busy = 0;
     Tnew = 0;
     OUT = 0;
@@ -33,60 +33,64 @@ always @(posedge clk) begin
         OUT = 0;
     end
     else begin
-        if(enMDU)
-        case (MDUOp)
-            `MULT: begin
-                {HI0, LO0} <= $signed(D1) * $signed(D2);
-                Tnew <= 5'd5;
-                Busy <= 1;
-            end
+        if(enMDU) begin
+            case (MDUOp)
+                `MULT: begin
+                    {HI, LO} <= $signed(D1) * $signed(D2);
+                    Tnew <= 5'd5;
+                    Busy <= 1;
+                end
 
-            `MULTU: begin
-                {HI0, LO0} <= D1 * D2;
-                Tnew <= 5'd5;
-                Busy <= 1;
-            end
+                `MULTU: begin
+                    {HI, LO} <= D1 * D2;
+                    Tnew <= 5'd5;
+                    Busy <= 1;
+                end
 
-            `DIV: begin
-                HI0 <= $signed(D1) % $signed(D2);
-                LO0 <= $signed(D1) / $signed(D2);
-                Tnew <= 5'd10;
-                Busy <= 1;
-            end
+                `DIV: begin
+                    HI <= $signed(D1) % $signed(D2);
+                    LO <= $signed(D1) / $signed(D2);
+                    Tnew <= 5'd10;
+                    Busy <= 1;
+                end
 
-            `DIVU: begin
-                HI0 <= D1 % D2;
-                LO0 <= D1 / D2;
-                Tnew <= 5'd10;
-                Busy <= 1;
-            end
+                `DIVU: begin
+                    HI <= D1 % D2;
+                    LO <= D1 / D2;
+                    Tnew <= 5'd10;
+                    Busy <= 1;
+                end
 
-            `MTHI: begin
-                HI0 <= D1;
-            end
+                `MTHI: begin
+                    HI <= D1;
+                end
 
-            `MTLO: begin
-                LO0 <= D1;
-            end
+                `MTLO: begin
+                    LO <= D1;
+                end
 
-            `MADDU: begin
-                {HI0, LO0} <= {HI0, LO0} + D1 * D2;
-            end
+                `MADDU: begin
+                    {HI, LO} <= {HI, LO} + D1 * D2;
+                end
 
-            default: begin
-                $display("MDU, NM$L");
-            end
-        endcase
-        else
-        case (MDUOp)
-            `MFHI:
-                OUT <= HI0;
-            `MFLO:
-                OUT <= LO0;
-            default: begin
-                $display("MOVE FROM MDU, NM$L");
-            end
-        endcase
+                default: begin
+                    $display("MDU, NM$L");
+                end
+            endcase
+        end
+        else begin
+            Tnew <= Tnew > 0 ? Tnew - 1 : 0;
+            Busy <= Tnew > 1;
+            case (MDUOp)
+                `MFHI:
+                    OUT <= HI;
+                `MFLO:
+                    OUT <= LO;
+                default: begin
+                    //$display("MOVE FROM MDU, NM$L");
+                end
+            endcase
+        end
     end
 end
 

@@ -9,6 +9,7 @@ module regW(
            input [31:0] PC,
            input [31:0] DR,
            input [31:0] AO,
+           input [31:0] MD,
            output reg [31:0] IRW,
            output reg [31:0] PCW,
            output reg [31:0] DRW,
