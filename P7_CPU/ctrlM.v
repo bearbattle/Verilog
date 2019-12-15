@@ -2,158 +2,133 @@
 
 `include "const.v"
 
-module DController(
+module MController(
            input [31:0] IR,
-           input Zero,
-           input Neq,
-           input Lez,
-           input Gtz,
-           input Ltz,
-           input Gez,
-           output reg [1:0] EXTOp,
-           output reg isj,
-           output reg isb,
-           output reg [1:0] PCSel
+           output DMWr,
+           output reg [1:0] WDSel
        );
 
+
+assign DMWr = (IR[`OP] == `sw
+               || IR[`OP] == `sb
+               || IR[`OP] == `sh)  ? 1 : 0;
+
 initial begin
-    EXTOp = 0;
-    isj = 0;
-    isb = 0;
-    PCSel = 0;
+    WDSel = 0;
 end
 
 always @(*) begin
-    EXTOp = 0;
-    isj = 0;
-    isb = 0;
-    PCSel = 0;
+    WDSel = 0;
     case (IR[`OP])
         // cal_r
         `R: begin
             case (IR[`FT])
+                `mfhi:
+                    WDSel = `MD;
+                `mflo:
+                    WDSel = `MD;
                 // jr
                 `jr: begin
-                    PCSel = `JRPC;
                 end
 
                 `jalr: begin
-                    PCSel = `JRPC;
+                    WDSel = `PC;
                 end
                 default: begin
+                    WDSel = `AO;
                 end
             endcase
         end
 
         //  cal_i
         `addi: begin
-            EXTOp = `SE;
+            WDSel = `AO;
         end
 
         `addiu: begin
-            EXTOp = `SE;
+            WDSel = `AO;
         end
 
         `andi: begin
-            EXTOp = `UE;
+            WDSel = `AO;
         end
 
         `ori: begin
-            EXTOp = `UE;
+            WDSel = `AO;
         end
 
         `xori: begin
-            EXTOp = `UE;
+            WDSel = `AO;
         end
 
         `lui: begin
-            EXTOp = `HE;
+            WDSel = `AO;
         end
 
         `slti: begin
-            EXTOp = `SE;
+            WDSel = `AO;
         end
 
         `sltiu: begin
-            EXTOp = `SE;
+            WDSel = `AO;
         end
 
         //  link
         `jal: begin
-            PCSel = `NPC;
-            isj = 1;
+            WDSel = `PC;
         end
 
         // j
         `j: begin
-            PCSel = `NPC;
-            isj = 1;
         end
 
         // b
         `beq: begin
-            isb = Zero;
-            PCSel = `NPC;
         end
 
         `bne: begin
-            isb = Neq;
-            PCSel = `NPC;
         end
 
         `blez: begin
-            isb = Lez;
-            PCSel = `NPC;
         end
 
         `bgtz: begin
-            isb = Gtz;
-            PCSel = `NPC;
         end
 
         `bltz: begin
-            isb = IR[20:16] == 5'd0 ? Ltz :
-                IR[20:16] == 5'd1 ? Gez : 0;
-            PCSel = `NPC;
         end
 
         // load
         `lb: begin
-            EXTOp = `SE;
+            WDSel = `DR;
         end
 
         `lbu: begin
-            EXTOp = `SE;
+            WDSel = `DR;
         end
 
         `lh: begin
-            EXTOp = `SE;
+            WDSel = `DR;
         end
 
         `lhu: begin
-            EXTOp = `SE;
+            WDSel = `DR;
         end
 
         `lw: begin
-            EXTOp = `SE;
+            WDSel = `DR;
         end
 
         //  store
         `sb: begin
-            EXTOp = `SE;
         end
 
         `sh: begin
-            EXTOp = `SE;
         end
 
         `sw: begin
-            EXTOp = `SE;
         end
 
-        `mas: begin
-            
-        end
         default: begin
         end
     endcase
